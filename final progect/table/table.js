@@ -1,12 +1,17 @@
 const tbody = document.querySelector('tbody')
 const addCompBtn = document.querySelector('#add_comp')
 const compTable = document.querySelector('table')
+const currentUser = localStorage.getItem('currentUser')
+let user = JSON.parse(localStorage.getItem('Users'))
 
-let computers = JSON.parse(localStorage.getItem('computers'))
 let Change = false
-
+let computers = []
 function updateTable() {
-
+    for (let user of users) {
+        if (user.user === currentUser) {
+            computers = user.computers
+        }
+    }
 
 
     tbody.innerHTML = ''
@@ -48,6 +53,11 @@ function addComputer() {
         }
 
         computers.push(newComputer)
+        for (let user of user) {
+            if (user.user === currentUser) {
+                computers = user.computers
+            }
+        }
         localStorage.setItem('computers', JSON.stringify(computers))
         updateTable()
         for (let input of allInputs) {
@@ -69,50 +79,56 @@ function addComputer() {
                 computer.videocard = allInputs[9].value;
             }
         }
-        localStorage.setItem('computers', JSON.stringify(computers))
-        updateTable()
-        for (let input of allInputs) {
-            input.value = ''
+        for (let user of user) {
+            if (user.user === currentUser) {
+                user.computers = computers
+            }
+            updateTable()
+            for (let input of allInputs) {
+                input.value = ''
+            }
         }
     }
-}
 
 
 
-function deleteComputer(id) {
-    computers = computers.filter((comp) => comp.id != parseInt(id));
+    function deleteComputer(id) {
+        computers = computers.filter((comp) => comp.id != parseInt(id));
+        for (let user of user) {
+            if (user.user === currentUser) {
+                computers = user.computers
+            }
+        }
+        updateTable()
+    }
 
-    localStorage.setItem('computers', JSON.stringify(computers))
+    let currentComp = computers.find((comp) => comp.id == parseInt(id))
+
+
+    function changeComputer(id) {
+
+        allInputs[0].value = currentComp.mark
+        allInputs[1].value = currentComp.img
+        allInputs[2].value = currentComp.price
+        allInputs[3].value = currentComp.memory
+        allInputs[4].value = currentComp.processororpu
+        allInputs[5].value = currentComp.ram
+        allInputs[6].value = currentComp.memorytip
+        allInputs[7].value = currentComp.oc
+        allInputs[8].value = currentComp.videocardgb
+        allInputs[9].value = currentComp.videocard
+
+        Change = true
+    }
+    function handleComputer(e) {
+        if (e.target.innerText === 'Delete') {
+            deleteComputer(e.target.id);
+        } else if (e.target.innerText === 'Change') {
+            changeComputer(e.target.id);
+        }
+    }
+    addCompBtn.addEventListener('click', addComputer)
+    compTable.addEventListener('click', handleComputer)
+
     updateTable()
 }
-
-let currentComp = computers.find((comp) => comp.id == parseInt(id))
-
-
-function changeComputer(id) {
-
-    allInputs[0].value = currentComp.mark
-    allInputs[1].value = currentComp.img
-    allInputs[2].value = currentComp.price
-    allInputs[3].value = currentComp.memory
-    allInputs[4].value = currentComp.processororpu
-    allInputs[5].value = currentComp.ram
-    allInputs[6].value = currentComp.memorytip
-    allInputs[7].value = currentComp.oc
-    allInputs[8].value = currentComp.videocardgb
-    allInputs[9].value = currentComp.videocard
-
-    Change = true
-}
-function handleComputer(e) {
-    if (e.target.innerText === 'Delete') {
-        deleteComputer(e.target.id);
-    } else if (e.target.innerText === 'Change') {
-        changeComputer(e.target.id);
-    }
-}
-addCompBtn.addEventListener('click', addComputer)
-compTable.addEventListener('click', handleComputer)
-
-updateTable()
-

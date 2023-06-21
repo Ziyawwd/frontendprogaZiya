@@ -26,7 +26,7 @@ function updateTable() {
                                 <td>${comp.price}</td>
                                 <td>
                                     <button id='${comp.id}' class="btn btn-danger">Delete</button>
-                                    <button id='${comp.id}' class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#Modal'>Change</button>
+                                    <button id='${comp.id}' class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#exampleModal1'>Change</button>
                                 </td>
                             </tr>`
     });
@@ -53,17 +53,13 @@ function addComputer() {
         }
 
         computers.push(newComputer)
-        for (let user of userы) {
+        for (let user of users) {
             if (user.user === currentUser) {
-                computers = user.computers
+               user.computers = computers 
             }
         }
         localStorage.setItem('Users', JSON.stringify(users))
-        for (let user of users) {
-            if (user.user === currentUser) {
-                computers = user.computers
-            }
-        }
+        
         updateTable()
         for (let input of allInputs) {
             input.value = ''
@@ -84,19 +80,21 @@ function addComputer() {
                 computer.videocard = allInputs[9].value;
             }
         }
-        for (let user of user) {
+        for (let user of users) {
             if (user.user === currentUser) {
                 user.computers = computers
             }
-            updateTable()
+            
+        }
+    }       updateTable()
             for (let input of allInputs) {
                 input.value = ''
             }
-        }
-    }
 
 
 
+
+}
     function deleteComputer(id) {
         computers = computers.filter((comp) => comp.id != parseInt(id));
         for (let user of users) {
@@ -108,11 +106,11 @@ function addComputer() {
         updateTable()
     }
 
-    let currentComp = computers.find((comp) => comp.id == parseInt(id))
+    let currentComp
 
 
     function changeComputer(id) {
-
+currentComp = computers.find((comp) => comp.id == parseInt(id))
         allInputs[0].value = currentComp.mark
         allInputs[1].value = currentComp.img
         allInputs[2].value = currentComp.price
@@ -137,4 +135,3 @@ function addComputer() {
     compTable.addEventListener('click', handleComputer)
 
     updateTable()
-}

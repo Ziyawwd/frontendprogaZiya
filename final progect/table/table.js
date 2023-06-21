@@ -2,7 +2,7 @@ const tbody = document.querySelector('tbody')
 const addCompBtn = document.querySelector('#add_comp')
 const compTable = document.querySelector('table')
 const currentUser = localStorage.getItem('currentUser')
-let user = JSON.parse(localStorage.getItem('Users'))
+let users = JSON.parse(localStorage.getItem('Users'))
 
 let Change = false
 let computers = []
@@ -53,12 +53,17 @@ function addComputer() {
         }
 
         computers.push(newComputer)
-        for (let user of user) {
+        for (let user of userы) {
             if (user.user === currentUser) {
                 computers = user.computers
             }
         }
-        localStorage.setItem('computers', JSON.stringify(computers))
+        localStorage.setItem('Users', JSON.stringify(users))
+        for (let user of users) {
+            if (user.user === currentUser) {
+                computers = user.computers
+            }
+        }
         updateTable()
         for (let input of allInputs) {
             input.value = ''
@@ -94,11 +99,12 @@ function addComputer() {
 
     function deleteComputer(id) {
         computers = computers.filter((comp) => comp.id != parseInt(id));
-        for (let user of user) {
+        for (let user of users) {
             if (user.user === currentUser) {
-                computers = user.computers
+               user.computers =  computers 
             }
         }
+        localStorage.setItem('Users', JSON.stringify(users))
         updateTable()
     }
 

@@ -8,12 +8,12 @@ const table = document.querySelector('#table')
 if (!currentUsers == "" && !currentUsers) {
     logout.style.display='inline'
     login.style.display = 'none'
-    logup.style.display = 'inline'
+    shop.style.display = 'inline'
     table.style.display = 'inline'
 } else {
     logout.style.display = 'none'
     login.style.display = 'inline'
-    logup.style.display = 'inline'
+    lshop.style.display = 'inline'
     table.style.display = 'none'
 }
 logout.addEventListener('click', function () {
@@ -21,5 +21,5 @@ logout.addEventListener('click', function () {
     user.innerHTML=''
     logout.style.display = 'none'
     login.style.display = 'inline'
-    logup.style.display = 'inline'
+    shop.style.display = 'inline'
 })
